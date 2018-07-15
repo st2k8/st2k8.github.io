@@ -16,10 +16,12 @@ $(document).ready(function(){
 	console.log(j+" off");
       }
       else if(wear[$(this).index()]==0){
+	if(!($(this).index()==2 && wear[1]==0)){
 	$("img.acc:nth-child("+j+")").animate({opacity:'1'});
 	$(this).animate({opacity:'1'});
 	wear[$(this).index()]=1;
 	console.log(j+" on");
+	}
       }
     });
   }
