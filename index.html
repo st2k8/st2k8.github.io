@@ -1,0 +1,120 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8">
+<title>防空駆逐艦秋月</title>
+<script type="text/javascript">
+
+var x = 15;
+var y = 15;
+var upDown = 1;
+var leftRight = 1;
+var BallObj;
+var TimerID;
+var BallSpeed;
+
+var bx=265;
+var BarObj;
+var BarSpeed=4;
+
+var score=0;
+
+function reset()
+{
+	clearInterval(IntervalId);
+}
+
+document.addEventListener("keydown",function(event){
+	switch(event.keyCode){
+		case 37:
+			if(bx > 15){
+				bx-=BarSpeed;
+			}
+			break;
+		case 39:
+			if(bx < 535){
+				bx+=BarSpeed;
+			}
+			break;
+	}
+}
+);
+
+function start()
+{
+	BallObj=document.getElementById("Ball");
+	BallSpeed=document.getElementById("speed_in").value;
+	BarObj=document.getElementById("Bar");
+	var IntervalId = setInterval("run()",50-BallSpeed*5);
+}
+
+function run()
+{
+	BarObj.style.left = bx;
+	document.getElementById("here").innerHTML="得点："+score;
+	
+	// if the ball hits the top side
+    if ( y <= 10 )
+    {
+       BallObj.src="images/onigiri.png";
+       clearTimeout(TimerID);
+       TimerID = setTimeout("ChangeImg()",500);
+       upDown *= -1;
+    }
+   
+    // if the ball hits the left or right side
+    if ( x <= 10 || x >= 580 )
+    {
+       leftRight *= -1;
+       BallObj.src="images/onigiri.png";
+       clearTimeout(TimerID);
+       TimerID = setTimeout("ChangeImg()",500);
+    }
+	
+	//collision with the bar
+	if ( y == 350 )
+	{
+		if ( x >= (bx) && x <= (bx+134) )
+		{
+			score++;
+			BallObj.src="images/onigiri.png";
+			clearTimeout(TimerID);
+			TimerID = setTimeout("ChangeImg()",500);
+			upDown *= -1;
+		}
+	}
+	// if the ball hits the bottom side
+	if ( y >= 380 )
+	{
+	leftRight= 0;
+	upDown = 0;
+	document.getElementById("there").innerHTML="ご馳走様でした! Press RESET button to reset";
+	}	
+	// Move the ball and increment our counters
+    BallObj.style.left = BallObj.offsetLeft + (leftRight * 5);
+    BallObj.style.top = BallObj.offsetTop + (upDown * 5);
+    y = BallObj.offsetTop;
+    x = BallObj.offsetLeft;
+}
+
+function ChangeImg()
+   {
+       document.getElementById("Ball").src="images/onigiri.png";
+   }
+
+</script>
+</head>
+<body>
+<div id="Table" style="border-right: black solid; border-top: black solid; border-left: black solid; width: 600px; border-bottom: black solid; height: 400px; background-color: white;"></div>
+<img src="images/onigiri.png" id="Ball" style="left: 15px; width: 30px; position: absolute; top: 15px; height: 30px;" />
+<img src="images/aki.png" id="Bar" style="left: 265px; width: 139px; position: absolute; top: 370px; height: 24px;" />
+<img src="images/bar.gif" id="sea" style="width: 605px; position: absolute; top: 394px; height: 20px;" />
+<form id="Input_Speed">
+<input type="number" id="speed_in">
+<input type="button" onclick="start()" value="START"><button onclick="reset()">RESET</button>
+</form>
+<p>防空駆逐艦秋月 alpha0.0.1</p>
+<p id="here"></p>
+<p id="there"></p>
+
+</body>
+</html>
